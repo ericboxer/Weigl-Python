@@ -8,7 +8,6 @@
 # ===============
 
 import socket 	# Weigl gear is fairly dependant on commpuncating through UDP packets
-import time
 
 # ===============
 # Start the weigl class
@@ -30,21 +29,26 @@ class weigl:
 		"""
 		return str(argument).lower()
 
-	def sendCommand(self,command,expectReturn="No"):
+	def sendCommand(self,command,expectReturn="No",expectedReturnMessages=1):
 		"""
 		The baase of sending a command and get any information back if provided
 		"""
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)					# Open the socket
+		s.settimeout(5)
+		s.bind(('',self.port))
 		s.sendto(command, (self.ipAddress,self.port))							# Send the Packet
 		q =self.makeArgumentLowerString(expectReturn) 
 		if q != "no":															# If there is rata to return, return it
 			try:
-				s.connect((self.ipAddress,self.port))
-				return s.recv(4096)
+				l = []
+				while true
+					s.connect((self.ipAddress,self.port))
+					l.append(s.recv(65535))											# 
+				return l
 			except socket.error:
 				return "The connection was refused. Are you sure it's there?"
 		else:
-			s.close
+			# s.close
 			return 
 
 # ===============
@@ -55,7 +59,7 @@ class weigl:
 		Get info from the device. Returns pretty much everythign you'd want to know about it.
 		"""
 		a="!?#"
-		return self.sendCommand(a, expectReturn="Yes")												# Semd the command. Looks like Grawlixes - http://bxhd.me/1WCdaOZ
+		return self.sendCommand(a, expectReturn="Yes",expectedReturnMessages=23)												# Semd the command. Looks like Grawlixes - http://bxhd.me/1WCdaOZ
 
 	def factoryReset(self,areYouSure="No"):										# Basically jsut a doublecheck to make sure REALLY want to reboot the device.
 		"""
@@ -144,11 +148,16 @@ class weigl:
 # Playground
 # ===============
 
-# phx1 = weigl()
-# phx1.ipAddress = "10.0.1.2"
+import time
 
-# phx2 = weigl()
-# phx2.ipAddress = "10.0.1.4"
+phx1 = weigl()
+ana1 = weigl()
 
-# print phx1.setGateway("192.168.7.7")
+ana1.ipAddress = "10.0.1.152"
+ana1.port =5559
+# ana1=ipAddress="10.0.1.152"
+
+print ana1.getInfo()
+
+
 
