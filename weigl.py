@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Add header info here at some point
+# (C) Eric Boxer, 2016
 #
 
 # ===============
@@ -22,15 +22,18 @@ class weigl:
 		self.displayTime = 200													# How long does a message on the screen stay on in 1/100 of second incraments
 
 # ===============
-# Since most optional arguments will be text based this will convert the argument to a lowercase string
+# Operational methods.
 # ===============
 	def makeArgumentLowerString(self,argument):
+		"""
+		Since most optional arguments will be text based this will convert the argument to a lowercase string.
+		"""
 		return str(argument).lower()
 
-# ===============
-# The baase of sending a command and get any information back if provided
-# ===============
 	def sendCommand(self,command,expectReturn="No"):
+		"""
+		The baase of sending a command and get any information back if provided
+		"""
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)					# Open the socket
 		s.sendto(command, (self.ipAddress,self.port))							# Send the Packet
 		q =self.makeArgumentLowerString(expectReturn) 
@@ -45,16 +48,19 @@ class weigl:
 			return 
 
 # ===============
-# Get info from the device. Returns pretty much everythign you'd want to know about it.
+# Setup Methods
 # ===============
 	def getInfo(self):
+		"""
+		Get info from the device. Returns pretty much everythign you'd want to know about it.
+		"""
 		a="!?#"
 		return self.sendCommand(a, expectReturn="Yes")												# Semd the command. Looks like Grawlixes - http://bxhd.me/1WCdaOZ
 
-# ===============
-# Factory reset the device. 
-# ===============
 	def factoryReset(self,areYouSure="No"):										# Basically jsut a doublecheck to make sure REALLY want to reboot the device.
+		"""
+		Factory reset the device. Requires positive validation.
+		"""
 		q = self.makeArgumentLowerString(areYouSure)
 		if q == "yes" or q == "true" or q == "1":								# Need someway to catch booleans in here. Not terribly worried at the moment.
 			a = "!sfactory#"
