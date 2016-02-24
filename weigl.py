@@ -34,16 +34,23 @@ class weigl:
 		The baase of sending a command and get any information back if provided
 		"""
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)					# Open the socket
-		s.settimeout(5)
+		s.settimeout(1)
 		s.bind(('',self.port))
 		s.sendto(command, (self.ipAddress,self.port))							# Send the Packet
 		q =self.makeArgumentLowerString(expectReturn) 
 		if q != "no":															# If there is rata to return, return it
 			try:
 				l = []
-				while true
+				while True:
 					s.connect((self.ipAddress,self.port))
-					l.append(s.recv(65535))											# 
+					t = s.recv(65535)											# 
+					if t[0:14] != "DMX-Merge-End:":								# DMX-Merge-End is always the last UDP string to come through
+						l.append(t)
+					else:
+						l.append(t)
+						print "EOF"
+						break
+					# print l
 				return l
 			except socket.error:
 				return "The connection was refused. Are you sure it's there?"
