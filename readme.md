@@ -1,5 +1,5 @@
 # Weigl Python Interface
-This class allows for easy Python integration when using Weigl Show Controll Devices.
+This class allows for easy Python integration when using Weigl Show Control Devices.
 
 ### Usage
 Simple enough - import the class and call each device on the network as an object.  
